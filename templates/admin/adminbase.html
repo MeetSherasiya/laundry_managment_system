@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Laundry Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'vendors/feather/feather.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="{% static 'vendors/datatables.net-bs4/dataTables.bootstrap4.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'js/select.dataTables.min.css' %}">
+  <!-- End plugin css for this page -->
+
+  {% block bootscript %}
+  {% endblock bootscript %}
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/vertical-layout-light/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% if company_fav_icon %}{{company_fav_icon}}{% else %}{% static 'images/logo-mini.svg' %}{% endif %}" />
+</head>
+<body class="sidebar-icon-only">
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="/admin-site/">{% if company_logo %}<img src="{{company_logo}}" alt="logo" style="vertical-align:baseline; height:50px;" />{% else %}<img src="{% static 'images/logo.svg' %}" alt="logo"/>{% endif %}</a>
+        <a class="navbar-brand brand-logo-mini" href="/admin-site/">{% if company_fav_icon %}<img src="{{company_fav_icon}}" alt="logo" style="width:60px; height:60px;" />{% else %}<img src="{% static 'images/logo-mini.svg' %}" alt="logo"/>{% endif %}</a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="icon-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% static 'images/faces/profile1.png' %}" alt="profile"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="{% url 'profile' %}">
+                <i class="ti-user text-primary"></i>
+                Profile
+              </a>
+              <a class="dropdown-item" href="{% url 'adminlogin' %}">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item {% if request.path == '/admin-site/' %}active{% endif %}">
+            <a class="nav-link" href="/admin-site/">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item {% if request.path == '/admin-site/today-req/' or request.path == '/admin-site/all-req/' %}active{% endif %}">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="ti-briefcase menu-icon"></i>
+              <span class="menu-title">User Request</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'todaywork' %}">Today's Request</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'allwork' %}">All Request</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item {% if request.path == '/admin-site/today-pickup-req/' %}active{% endif %}">
+            <a class="nav-link" href="/admin-site/today-pickup-req/">
+              <i class="ti-shopping-cart menu-icon"></i>
+              <span class="menu-title">Today Pick Up's</span>
+            </a>
+          </li>
+          <li class="nav-item {% if request.path == '/admin-site/gen-setting/' %}active{% endif %}">
+            <a class="nav-link" href="/admin-site/gen-setting/">
+              <i class="ti-settings menu-icon"></i>
+              <span class="menu-title">General Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        {% block body %}{% endblock body %}
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023. <a href="www.meetsherasiya.me" target="_blank">Meet Sherasiya</a> from Laundry Managment System. All rights reserved.</span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="{% static 'vendors/chart.js/Chart.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-bs4/dataTables.bootstrap4.js' %}"></script>
+  <script src="{% static 'js/dataTables.select.min.js' %}"></script>
+
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="{% static 'js/off-canvas.js' %}"></script>
+  <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{% static 'js/template.js' %}"></script>
+  <script src="{% static 'js/settings.js' %}"></script>
+  <script src="{% static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{% static 'js/dashboard.js' %}"></script>
+  <script src="{% static 'js/Chart.roundedBarCharts.js' %}"></script>
+  <!-- End custom js for this page-->
+</body>
+
+</html>
+

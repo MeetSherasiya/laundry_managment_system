@@ -1,0 +1,109 @@
+{% extends "admin/adminbase.html" %}
+{% load custom_filters %}
+
+{% block bootscript %}
+
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add jQuery and Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": [1, 2, 3, 4, 5, 8, 9] }
+                ]
+            });
+        });
+    </script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <style>
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 0em 0em;
+        }
+    </style>
+{% endblock bootscript %}
+
+{% block body %}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-0">All Request</p>
+                <div class="table-responsive mt-3">
+                <table class="table table-striped table-borderless text-center" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Date</th>
+                            <th>User Name</th>
+                            <th>Total Cloth</th>
+                            <th>Total Price</th>
+                            <th>Other Cloths</th>
+                            <th>Service</th>
+                            <th>Progress</th>
+                            <th>Progress Update</th>
+                            <th>Mobile No.</th>
+                            <th>Paymnet Status</th>
+                            <th>Action</th>
+                        </tr>  
+                    </thead>
+                <tbody>
+                    {% for user in page_obj %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{user.pickup_date|date:"d, F Y"}}</td>
+                        <td class="font-weight-bold">{{user.user}}</td>
+                        <td>{{user|calculate_total_cloths}}</td>
+                        <td class="font-weight-bold">Rs. {{user.totalprice}}</td>
+                        <td>
+                            <i class="btn {% if user.otherclothes == 0 %}btn-outline-dark{% else %}btn-outline-info{% endif %}">
+                                {% if user.otherclothes == 0 %}
+                                    <span class="ti-close"></span>
+                                {% else %}
+                                    <span class="ti-check"></span>
+                                {% endif %}
+                            </i>
+                        </td>
+                        <td><div class="badge {% if user.service_type == 'drop' %}badge-outline-info{% else %}badge-outline-danger{% endif %}">{{user.service_type|capfirst}}</div></td>
+                        <td class="font-weight-medium"><div class="badge {% if user.progress == 'Pending' %}bg-primary{% elif user.progress == 'Accept' %}bg-warning {% elif user.progress == 'Inprogress' %}bg-dark {% elif user.progress == 'Finish' %}bg-success{% elif user.progress == 'Cancle' %}bg-danger{% endif %}">{{user.progress}}</div></td>
+                        <td class="font-weight-medium">
+                            <a class="badge badge-success" href="{% url 'update_progress' user.uuid %}"><span class="ti-check"></span></a>
+                            <a class="badge badge-danger" href="{% url 'cancle_progress' user.uuid %}"><span class="ti-close"></span></a></td>
+                        <td>{{user.contact_person}}</td>
+                        <td><div class="badge {% if user.payment == 'Unpaid' %}badge-outline-warning{% elif user.payment == 'Cash' %}badge-outline-dark{% else %}badge-outline-info{% endif %}">{{user.payment|capfirst}}</div></td>
+                        <td><a class="badge badge-outline-dark text-dark" href="{% url 'req_all_update' user.uuid %}"><i class="ti-marker-alt mr-1"></i>Update</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+            {% comment %} <div class="pagination mt-3">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="page-link">&laquo; First</a>
+                {% endif %}
+            
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a href="?page={{ num }}" class="page-link page-link-active">{{ num }}</a>
+                    {% else %}
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+            
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Last &raquo;</a>
+                {% endif %}
+            </div> {% endcomment %}
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

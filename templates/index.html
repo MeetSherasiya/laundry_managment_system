@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block navitems %}
+<style>
+    .dropdown-menu-end {
+        right: 0;
+    }
+
+    @media (min-width: 992px) {
+        .dropdown-menu-end.dropdown-menu {
+        margin-right: 0;
+        margin-left: auto;
+        }
+    }
+
+</style>
+<div class="collapse navbar-collapse" id="navbarColor02">
+<ul class="navbar-nav ms-auto">
+    <a class="nav-link text-light" href="{% url 'new_request' %}"><span class="material-symbols-outlined">edit</span><span class="align-top ms-1">New Request</span></a>
+    <div class="ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Settings
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'user_profile' %}">
+                <span class="material-symbols-outlined">person</span>
+                <span class="align-top ms-1">Profile</span>
+            </a>
+            <a class="dropdown-item" href="{% url 'login' %}">
+                <span class="material-symbols-outlined">logout</span>
+                <span class="align-top ms-1">Log Out</span>
+            </a>
+            </div>
+        </li>
+    </div>
+
+</ul>
+</div>
+{% endblock navitems %}
+
+
+{% block body %}
+<div class="container mb-5">
+<div class="row mt-3">
+    {% for progress_choice, count in progress_counts.items %}
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card {% if progress_choice == 'Pending' %}border-primary{% elif progress_choice == 'Accept' %}border-warning {% elif progress_choice == 'Inprogress' %}border-dark {% elif progress_choice == 'Finish' %}border-success{% elif progress_choice == 'Cancle' %}border-danger{% endif %} mb-3">
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="numbers">
+                            {% if progress_choice == 'Pending' %}<h6 class="text-md mb-0 text-capitalize font-weight-bold">New Request Sent</h6>{% elif progress_choice == 'Accept' %}
+                            <h6 class="text-md mb-0 text-capitalize font-weight-bold">Accept Request</h6>
+                                {% elif progress_choice == 'Inprogress' %}<h6 class="text-md mb-0 text-capitalize font-weight-bold">Inprogress</h6>
+                                {% elif progress_choice == 'Finish' %}
+                                <h6 class="text-sm mb-0 text-capitalize font-weight-bold">Finish</h6>
+                                {% elif progress_choice == 'Cancle' %}
+                                <h6 class="text-sm mb-0 text-capitalize font-weight-bold">Cancle</h6>
+                                {% endif %}
+
+                                {% if progress_choice == 'Pending' %}<h4 class="font-weight-bolder mb-0 text-primary">{{count}}</h4>
+                                {% elif progress_choice == 'Accept' %}<h4 class="font-weight-bolder mb-0 text-warning">{{count}}</h4>
+                                {% elif progress_choice == 'Inprogress' %}<h4 class="font-weight-bolder mb-0 text-dark">{{count}}</h4>
+                                {% elif progress_choice == 'Finish' %}<h4 class="font-weight-bolder mb-0 text-success">{{count}}</h4>
+                                {% elif progress_choice == 'Cancle' %}<h4 class="font-weight-bolder mb-0 text-danger">{{count}}</h4>{% endif %}
+                        </div>
+                    </div>
+                    <div class="col-4 text-end">
+                        {% if progress_choice == 'Pending' %}<span class="material-symbols-outlined text-primary" style="font-size:48px;">speed</span>
+                        {% elif progress_choice == 'Accept' %}<span class="material-symbols-outlined text-warning" style="font-size:48px;">add_shopping_cart</span>
+                        {% elif progress_choice == 'Inprogress' %}<span class="material-symbols-outlined text-dark" style="font-size:48px;">clock_loader_10</span>
+                        {% elif progress_choice == 'Finish' %}<span class="material-symbols-outlined text-success" style="font-size:48px;">sentiment_satisfied</span>
+                        {% elif progress_choice == 'Cancle' %}<span class="material-symbols-outlined text-danger" style="font-size:48px;">cancel</span>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<div class="mt-3">
+    <h2 class="text-center text-dark">Pricing List</h2>
+
+    <table class="table table-hover table-bordered border-secondary">
+        <thead>
+          <tr class="table-dark">
+            <th scope="col">Type</th>
+            <th scope="col">Price (Per Item)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Top Wear Laundry Price</th>
+            <td>Rs. {{price.topwear}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Bootom Wear Laundry Price</th>
+            <td>Rs. {{price.bottomwear}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Woolen Cloth Laundry Price</th>
+            <td>Rs. {{price.woolenwear}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Other Price</th>
+            <td>Other Price Depend Upon Cloth Variety(other than above three category)</td>
+          </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="mt-3">
+    <h2 class="text-center text-dark">History</h2>
+    <div class="table-responsive">
+    <table class="table table-hover table-bordered border-secondary">
+        <thead>
+            <tr class="table-dark">
+            <th scope="col">No.</th>
+            <th scope="col">Date</th>
+            <th scope="col" colspan="2">Total Cloths</th>
+            <th scope="col">Service Type</th>
+            <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-dark">
+                <td></td>
+                <td></td>
+                <td>Item</td>
+                <td>Price</td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% for req in history%}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{req.pickup_date}}</td>
+                <td>{{req.topwear|add:req.bottomwear|add:req.woolenwear|add:req.otherclothes}}</td>
+                <td>Rs. {{req.totalprice}}</td>
+                <td><span class=" badge rounded-pill {% if req.service_type == 'drop' %}bg-primary{% else %}bg-secondary{% endif %} text-size-lg">{{req.service_type|capfirst}}</span></td>
+                <td><span class="badge rounded-pill {% if req.progress == 'Pending' %}bg-primary{% elif req.progress == 'Accept' %}bg-warning {% elif req.progress == 'Inprogress' %}bg-dark {% elif req.progress == 'Finish' %}bg-success{% elif req.progress == 'Cancle' %}bg-danger{% endif %}">{{req.progress}}</span></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+</div>
+{% endblock body %}

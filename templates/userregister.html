@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block navitems %}
+<div class="collapse navbar-collapse" id="navbarColor01">
+<ul class="navbar-nav me-auto">
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="/login/">Sign in</a>
+        <a class="dropdown-item" href="/register/">Sign up</a>
+    </div>
+</li>
+</ul>
+</div>
+{% endblock navitems %}
+
+
+{% block body %}
+
+<div class="row justify-content-center mb-5 mt-4">
+    <input type="hidden" id="csrf" value="{{csrf_token}}">
+    <div class="col-sm-6">
+        <div class="card bg-light mb-3" >
+            <div class="card-header"><i class="fa-solid fa-pen-to-square fa-lg"></i>User Register</div>
+            <div class="card-body">
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show mt-2 col-6" style="margin:0 auto;" role="alert">
+                <strong>{{message}}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </button>
+            </div>
+            {% endfor %}
+
+        <div class="login100-form validate-form" method="post">
+            <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                <span class="label-input100 pb-2">Username</span>
+                <input class="input100 form-control mb-3" type="text" id="username" name="username" placeholder="Enter Username">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate = "Email is required">
+                <span class="label-input100 pb-2">Email</span>
+                <input class="input100 form-control mb-3" type="Email" id="email" name="email" placeholder="Enter Email">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+                <span class="label-input100 pb-2">Password</span>
+                <input class="input100 form-control mb-3" type="password" id="password" name="password" placeholder="Enter password">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate = "Re-type Password is required">
+                <span class="label-input100 pb-2">Re-type Password</span>
+                <input class="input100 form-control mb-3" type="password" id="password1" name="password1" placeholder="Enter Re-type password">
+                <span class="focus-input100"></span>
+            </div>
+            <button class="login100-form-btn btn btn-primary" id="submit-button" onclick="register()">Register</button>
+            <button class="btn btn-primary d-none" type="button" id="loading-button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            </button>
+            <p class="mt-2"><small class="text-muted">Already Account? <a href="/login/">Sign in</a></small></p>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#submit-button').on('click', function () {
+            $('#submit-button').addClass('d-none');
+            $('#loading-button').removeClass('d-none');
+        });
+    });
+</script>
+{% endblock body %}

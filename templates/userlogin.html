@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block navitems %}
+<div class="collapse navbar-collapse" id="navbarColor01">
+<ul class="navbar-nav me-auto">
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="/login/">Sign in</a>
+        <a class="dropdown-item" href="/register/">Sign up</a>
+    </div>
+</li>
+<a class="nav-link text-light" href="{% url 'adminlogin' %}"><span class="material-symbols-outlined">person</span><span class="align-top ms-1">Admin</span></a>
+</ul>
+</div>
+{% endblock navitems %}
+
+{% block body %}
+
+<div class="row justify-content-center mb-5 mt-4">
+    <div class="col-sm-6">
+        <div class="card bg-light mb-3" >
+            <div class="card-header"><i class="fa-solid fa-pen-to-square fa-lg"></i>User Login</div>
+            <div class="card-body">
+            {% if messages %}
+            <div class="alert alert-danger alert-dismissible fade show mt-2 col-6" style="margin:0 auto;" role="alert">
+                <strong>{{messages}}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </button>
+            </div>
+            {% endif %}
+
+        <div class="validate-form">
+            <form class="login100-form" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input class="form-control" name="username" id="username" type="text" placeholder="Enter Username" autocomplete="off" required data-msg="Please enter your username">
+                </div>
+                <div class="form-group mt-2">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" name="password" id="password" type="password" placeholder="Enter Password" autocomplete="off" required data-msg="Please enter your password">
+                    <p><small class="text-muted">Forgot Password?<a href="{% url 'password-reset' %}">Click Here</a></small></p>
+                </div>
+                <button class="login100-form-btn btn btn-primary mt-1">Login</button>
+                <p class="mt-1"><small class="text-muted">Don't Have Account? <a href="/register/">Sign in</a></small></p>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock body %}

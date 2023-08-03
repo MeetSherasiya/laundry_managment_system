@@ -1,0 +1,129 @@
+{% extends "admin/adminbase.html" %}
+
+{% block body %}
+
+<div class="content-wrapper">
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <input type="hidden" value="{{csrf_token}}" id="csrf">
+        <h4 class="card-title">Company Details</h4>
+        <div class="forms-sample" method="post">
+          <div class="form-group">
+            <label for="companyname">Company Name</label>
+            <input type="text" class="form-control" id="companyname" placeholder="Company Name" value="{{company.comapny_name}}">
+          </div>
+          <div class="form-group">
+              <label for="CompanyEmail">Company Email address</label>
+              <input type="email" class="form-control" id="CompanyEmail" placeholder="Company Email" value="{{company.comapny_email}}">
+            </div>
+            <div class="form-group">
+              <label for="EmailPassword">Email Password</label>
+              <div class="input-group">
+                  <input type="password" class="form-control" id="EmailPassword" placeholder="Email Password" value="{{company.password}}">
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" id="showHidePasswordBtn">
+                          <i class="icon-eye"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>
+          <div class="form-group">
+            <label>Company Logo</label>
+            <div class="input-group col-xs-12">
+              <input type="file" class="custom-file-input rounded-pill" id="CompanyLogo" onchange="updateLogoPreview()">
+              <label for="CompanyLogo" class="custom-file-label rounded-pill">Choose file</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Company Fav Icon</label>
+            <div class="input-group col-xs-12">
+              <input type="file" class="custom-file-input rounded-pill" id="CompanyFavIcon" onchange="updateFavIconPreview()">
+              <label for="CompanyFavIcon" class="custom-file-label rounded-pill">Choose file</label>
+            </div>
+          </div>
+          <button class="btn btn-primary mr-2" onclick="updatecompany()">Submit</button>
+          <a href="{% url 'gen_setting' %}" class="btn btn-light">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function updatecompany() {
+    var companyname = document.getElementById('companyname').value;
+    var CompanyEmail = document.getElementById('CompanyEmail').value;
+    var EmailPassword = document.getElementById('EmailPassword').value;
+    var companyLogo = document.getElementById('CompanyLogo').files[0];
+    var companyFavIcon = document.getElementById('CompanyFavIcon').files[0];
+    var csrf = document.getElementById('csrf').value;
+    var userId = {{ request.user.id }};
+  
+    var data = {
+      'companyname': companyname,
+      'CompanyEmail': CompanyEmail,
+      'EmailPassword': EmailPassword,
+      'CompanyLogo': companyLogo,
+      'CompanyFavIcon': companyFavIcon,
+      'userId': userId,
+    };
+    
+    var formData = new FormData();
+    formData.append('companyname', companyname);
+    formData.append('CompanyEmail', CompanyEmail);
+    formData.append('EmailPassword', EmailPassword);
+    formData.append('CompanyLogo', companyLogo);
+    formData.append('CompanyFavIcon', companyFavIcon);
+    formData.append('userId', userId);
+  
+    fetch('/apis/update-company/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrf
+        },
+        body: formData,
+    }).then(result => result.json()).then(response => {
+        console.log(response)
+        if (response.status == 201) {
+            window.location.href = '/admin-site/gen-setting/';
+            alert("Update Company Profile Successfully");
+        } else {
+            alert(response.message)
+        }
+    });
+  }
+  
+  function updateLogoPreview() {
+    const logoInput = document.getElementById('CompanyLogo');
+    const logoLabel = logoInput.nextElementSibling;
+    const logoFileName = logoInput.files[0].name;
+    logoLabel.innerText = logoFileName;
+  }
+  
+  function updateFavIconPreview() {
+    const favIconInput = document.getElementById('CompanyFavIcon');
+    const favIconLabel = favIconInput.nextElementSibling;
+    const favIconFileName = favIconInput.files[0].name;
+    favIconLabel.innerText = favIconFileName;
+  }
+  
+  document.getElementById('showHidePasswordBtn').addEventListener('click', function () {
+    var passwordInput = document.getElementById('EmailPassword');
+    var icon = this.querySelector('i');
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+  });
+</script>
+
+
+{% endblock body %}

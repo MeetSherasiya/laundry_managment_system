@@ -1,0 +1,42 @@
+{% extends "admin/adminbase.html" %}
+{% load custom_filters %}
+
+
+{% block body %}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-0">Today Request</p>
+                <div class="table-responsive mt-3">
+                <table class="table table-striped table-borderless text-center" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>User Name</th>
+                            <th>Total Cloth</th>
+                            <th>Mobile No.</th>
+                            <th>Adddress</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td class="font-weight-bold">{{user.user}}</td>
+                            <td>{{user|calculate_total_cloths}}</td>
+                            <td>{{user.contact_person}}</td>
+                            <td>{{user.address}}</td>
+                            <td><a class="badge badge-dark" href="{% url 'pickup_today_detials' user.uuid %}"><i class="ti-eye mr-1"></i>View</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

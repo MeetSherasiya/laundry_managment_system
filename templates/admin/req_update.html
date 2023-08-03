@@ -1,0 +1,217 @@
+{% extends "admin/adminbase.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="content-wrapper">
+<div class="col-12 grid-margin stretch-card">
+<div class="card">
+    <div class="card-body">
+    <input type="hidden" id="csrf" value="{{csrf_token}}">
+    <input type="hidden" id="uuid" value="{{users.uuid}}">
+    <h4 class="card-title">Information of {{users}}</h4>
+    <div class="forms-sample" method="post">
+        <div class="row">
+        <div class="form-group col-md-3">
+        <label for="pickup_date">Pick Up Date</label>
+        <input type="date" class="form-control" id="pickup_date" value="{{users.pickup_date|date:'Y-m-d'}}" placeholder="Date">
+        </div>
+        <div class="form-group col-md-3">
+        <label for="service_type">Service_Type</label>
+        <select class="form-control" id="service_type">
+            <option>{{users.service_type}}</option>
+            <option>{% if users.service_type != 'drop' %}drop{% else %}pickup{% endif %}</option>
+        </select>
+        </div>
+        <div class="form-group col-md-3">
+        <label for="progress">Progress</label>
+        <select class="form-control" id="progress">
+            {% for choice_value, choice_label in users.PROGRESS_CHOICES %}
+                {% if users.progress == choice_label %}
+                    <option value="{{ choice_label }}" selected>{{ choice_label }}</option>
+                {% else %}
+                    <option value="{{ choice_label }}">{{ choice_label }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        </div>
+        <div class="form-group col-md-3">
+        <label for="payment">Payment Status</label>
+        <select class="form-control" id="payment">
+            {% for choice_value, choice_label in users.PAYMENT_CHOICES %}
+                {% if users.payment == choice_label %}
+                    <option value="{{ choice_label }}" selected>{{ choice_label }}</option>
+                {% else %}
+                    <option value="{{ choice_label }}">{{ choice_label }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+            <label for="topwear">Top Wear</label>
+            <input type="number" class="form-control" id="topwear" value="{{users.topwear}}" placeholder="Top wear" oninput="updateTopWearPrice()">
+            </div>
+            <div class="form-group col-md-3">
+            <label for="topwearprice">Top Wear Price</label>
+            <input type="hidden" id="topwearpricecurrent" value="{{prices.topwear}}">
+            <input type="number" class="form-control" id="topwearprice" value="{{users.topwearprice}}" placeholder="Top wear Price">
+            </div>
+            <div class="form-group col-md-3">
+            <label for="bottomwear">Bottom Wear</label>
+            <input type="number" class="form-control" id="bottomwear" value="{{users.bottomwear}}" placeholder="Bottom wear" oninput="updateBottomWearPrice()">
+            </div>
+            <div class="form-group col-md-3">
+            <label for="bottomwearprice">Bottom Wear Price</label>
+            <input type="hidden" id="bottomwearpricecurrent" value="{{prices.bottomwear}}">
+            <input type="number" class="form-control" id="bottomwearprice" value="{{users.bottomwearprice}}" placeholder="Bottom wear Price">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+            <label for="woolenwear">Woolen Wear</label>
+            <input type="number" class="form-control" id="woolenwear" value="{{users.woolenwear}}" placeholder="Woolen wear" oninput="updateWoolenWearPrice()">
+            </div>
+            <div class="form-group col-md-3">
+            <label for="woolenwearprice">Woolen Wear Price</label>
+            <input type="hidden" id="woolenwearpricecurrent" value="{{prices.woolenwear}}">
+            <input type="number" class="form-control" id="woolenwearprice" value="{{users.woolenwearprice}}" placeholder="Woolen wear Price">
+            </div>
+            <div class="form-group col-md-3">
+            <label for="othercloth">Other Cloths</label>
+            <input type="number" class="form-control" id="othercloth" value="{{users.otherclothes}}" placeholder="othercloth">
+            </div>
+            <div class="form-group col-md-3">
+            <label for="otherclothprice">Other Cloths Price</label>
+            <input type="number" class="form-control" id="otherclothprice" value="{{users.otherclothesprice}}" placeholder="othercloth Price" oninput="updateTotalPrice()">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+            <label for="mobilenumber">Mobile No.</label>
+            <input type="number" class="form-control" id="mobilenumber" value="{{users.contact_person}}" placeholder="mobilenumber">
+            </div>
+            <div class="form-group col-md-3">
+            <label for="totalprice">Total Price</label>
+            <input type="number" class="form-control" id="totalprice" value="{{users.totalprice}}" placeholder="Total Price">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="4">{{users.description}}</textarea>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address" rows="4">{{users.address}}</textarea>
+            </div>
+        </div>
+        <button class="btn btn-primary mr-2" onclick="update_record()">Update</button>
+        <button type="reset" class="btn btn-light">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    function update_record(){
+        var pickup = document.getElementById('pickup_date').value;
+        var progress = document.getElementById('progress').value;
+        var payment = document.getElementById('payment').value;
+        var topwear = document.getElementById('topwear').value;
+        var topwearprice = document.getElementById('topwearprice').value;
+        var bottomwear = document.getElementById('bottomwear').value;
+        var bottomwearprice = document.getElementById('bottomwearprice').value;
+        var woolencloth = document.getElementById('woolenwear').value;
+        var woolenclothprice = document.getElementById('woolenwearprice').value;
+        var othercloth = document.getElementById('othercloth').value;
+        var otherclothprice = document.getElementById('otherclothprice').value;
+        var servicetype = document.getElementById('service_type').value;
+        var address = document.getElementById('address').value;
+        var mobilenumber = document.getElementById('mobilenumber').value;
+        var totalprice = document.getElementById('totalprice').value;
+        var description = document.getElementById('description').value;
+        var csrf = document.getElementById('csrf').value;
+        var uuid = document.getElementById('uuid').value;
+
+        var data = {
+            'pickup': pickup,
+            'progress': progress,
+            'payment': payment,
+            'topwear': topwear,
+            'topwearprice': topwearprice,
+            'bottomwear': bottomwear,
+            'bottomwearprice': bottomwearprice,
+            'woolencloth': woolencloth,
+            'woolenclothprice': woolenclothprice,
+            'othercloth': othercloth,
+            'otherclothprice': otherclothprice,
+            'servicetype': servicetype,
+            'address': address,
+            'mobilenumber': mobilenumber,
+            'totalprice': totalprice,
+            'description': description,
+            'uuid': uuid
+        }
+        fetch('/apis/update/', {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json',
+                'X-CSRFToken' : csrf
+            },
+            body : JSON.stringify(data)
+        }).then(result => result.json()).then(response => {
+            console.log(response)
+            if(response.status == 201){
+                window.location.href = '/admin-site/today-req/';
+                alert("Update Successfully");
+            }else{
+                alert(response.message)
+            }
+        })
+    }
+
+    function updateTopWearPrice() {
+        const TopWearValue = parseInt(document.getElementById('topwear').value);
+        const TopWearPrice = parseInt(document.getElementById('topwearpricecurrent').value);
+        const calculatedPrice = TopWearValue * TopWearPrice;
+        document.getElementById('topwearprice').value = calculatedPrice;
+        updateTotalPrice();
+    }
+    function updateBottomWearPrice() {
+        const bottomWearValue = parseInt(document.getElementById('bottomwear').value);
+        const bottomWearPrice = parseInt(document.getElementById('bottomwearpricecurrent').value);
+        const calculatedPrice = bottomWearValue * bottomWearPrice;
+        document.getElementById('bottomwearprice').value = calculatedPrice;
+        updateTotalPrice();
+    }
+    function updateWoolenWearPrice() {
+        const woolenWearValue = parseInt(document.getElementById('woolenwear').value);
+        const woolenWearPrice = parseInt(document.getElementById('woolenwearpricecurrent').value);
+        const calculatedPrice = woolenWearValue * woolenWearPrice;
+        document.getElementById('woolenwearprice').value = calculatedPrice;
+        updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+        const topWearPrice = parseFloat(document.getElementById('topwearprice').value);
+        const bottomWearPrice = parseFloat(document.getElementById('bottomwearprice').value);
+        const woolenWearPrice = parseFloat(document.getElementById('woolenwearprice').value);
+        const otherClothPrice = parseFloat(document.getElementById('otherclothprice').value);
+        const totalPrice = topWearPrice + bottomWearPrice + woolenWearPrice + otherClothPrice;
+
+        document.getElementById('totalprice').value = totalPrice;
+    }
+    document.getElementById('topwear').addEventListener('input', updateTopWearPrice);
+    document.getElementById('bottomwear').addEventListener('input', updateBottomWearPrice);
+    document.getElementById('woolenwear').addEventListener('input', updateWoolenWearPrice);
+    document.getElementById('othercloth').addEventListener('input', updateTotalPrice);
+
+    updateTotalPrice();
+
+</script>
+
+
+
+{% endblock body %}
