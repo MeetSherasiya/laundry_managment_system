@@ -31,17 +31,35 @@ Once `pip` has finished downloading the dependencies:
 ```
 And navigate to `http://127.0.0.1:8000/`.
 
+# Admin View
+
 ## Home Page
-<img src='screenshot/homepage.png' >
+<img src='screenshots/adminhome.png' >
 <br>
-<p>Add Product Page</p>
-<img src='screenshot/addproduct.png'>
+<p>Request Page</p>
+<img src='screenshots/allrequest.png'>
 <br>
-<p>All Product Page</p>
-<img src='screenshot/allproduct.png'>
+<p>Today Pick Up Page</p>
+<img src='screenshots/todaypickup.png'>
 <br>
-<p>Customer Bills Page</p>
-<img src='screenshot/customerbill.png'>
+<p>General Setting Page</p>
+<img src='screenshots/generaladminsettings.png'>
 <br>
-<p>Bill Page</p>
-<img src='screenshot/bill.png'>
+<p>Admin Details Page</p>
+<img src='screenshots/admindetails.png'>
+<br>
+
+
+# User View
+
+## Home Page
+<img src='screenshots/userhomepage.png'>
+<br>
+<p>User Request Page</p>
+<img src='screenshots/userrequest.png'>
+<br>
+<p>User Profile Page</p>
+<img src='screenshots/userprofiledetails.png'>
+<br>
+<p>User Register Page</p>
+<img src='screenshots/userregister.png'>
