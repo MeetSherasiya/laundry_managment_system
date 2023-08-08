@@ -2,23 +2,23 @@
 
 # Key Features:
 
-## 1. User Registration and Authentication:
+1. User Registration and Authentication:
 Users can create accounts and log in securely to access the system's features.
 Authentication ensures that only authorized users can place laundry requests.
 
-## 2. Order Placement:
+2. Order Placement:
 Users can easily place new laundry requests, specifying their preferences and requirements.
 They can select services like washing, drying, ironing, and folding.
 
-## 3. Order Tracking:
+3. Order Tracking:
 The system provides real-time tracking of laundry orders from pick-up to delivery.
 Users can check the status of their orders through the user dashboard.
 
-## 4. Pick-up and Delivery Scheduling:
+4. Pick-up and Delivery Scheduling:
 Users can schedule laundry pick-ups and deliveries at their preferred date and time.
 The system ensures timely and efficient service to customers.
 
-## 5. Admin Dashboard:
+5. Admin Dashboard:
 The admin interface provides a comprehensive dashboard with an overview of all laundry requests.
 Admins can manage pending orders, view key metrics, and access analytics.
 
