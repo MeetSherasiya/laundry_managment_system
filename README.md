@@ -51,6 +51,12 @@ Once `pip` has finished downloading the dependencies:
 (env)$ cd laundry_managment_system
 (env)$ python manage.py runserver
 ```
+Add the Email SMTP Details in settings.py file
+```sh
+EMAIL_HOST_USER = 'Enter Email'
+EMAIL_HOST_PASSWORD = 'Enter Password'
+```
+
 And navigate to `http://127.0.0.1:8000/`.
 
 # Admin View
