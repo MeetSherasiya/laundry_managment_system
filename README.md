@@ -57,7 +57,7 @@ EMAIL_HOST_USER = 'Enter Email'
 EMAIL_HOST_PASSWORD = 'Enter Password'
 ```
 
-##Change the Company Email or Password with your Password for send the email from your account
+## Change the Company Email or Password with your Password for send the email from your account
 Go to the General Settings in website and change email or password
 
 And navigate to `http://127.0.0.1:8000/`.
